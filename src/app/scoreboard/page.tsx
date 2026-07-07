@@ -8,7 +8,7 @@ import { redirect } from "next/navigation";
 export const revalidate = 0; // Vždy fetchnout nová data
 
 interface ScoreboardProps {
-  searchParams: { week?: string };
+  searchParams: Promise<{ week?: string }>;
 }
 
 export default async function Scoreboard({ searchParams }: ScoreboardProps) {
