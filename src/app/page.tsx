@@ -59,21 +59,21 @@ export default async function Home() {
 
     if (!pError && pCount !== null) poopCount = pCount
 
-    // Fetch latest 5 farts
+    // Fetch latest 50 farts for local undo buffer
     const { data: latestFarts } = await supabase
       .from('farts_log')
       .select('*')
       .eq('user_id', user.id)
       .order('created_at', { ascending: false })
-      .limit(5)
+      .limit(50)
 
-    // Fetch latest 5 poops
+    // Fetch latest 50 poops for local undo buffer
     const { data: latestPoops } = await supabase
       .from('poops_log')
       .select('*')
       .eq('user_id', user.id)
       .order('created_at', { ascending: false })
-      .limit(5)
+      .limit(50)
 
     const farts = (latestFarts || []).map((f) => ({
       id: f.id,
@@ -92,7 +92,7 @@ export default async function Home() {
     // Merge and sort
     latestEvents = [...farts, ...poops]
       .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
-      .slice(0, 5)
+      .slice(0, 50)
   }
 
   return <DashboardClient initialFartCount={fartCount} initialPoopCount={poopCount} campStatusText={campStatusText} initialLatestEvents={latestEvents} />

@@ -98,7 +98,7 @@ export default function DashboardClient({ initialFartCount, initialPoopCount, ca
       intensity: type === 'tichacek' ? 'low' : 'nuclear',
     };
     setFartCount(prev => prev + 1);
-    setLatestEvents(prev => [newEvent, ...prev].slice(0, 5));
+    setLatestEvents(prev => [newEvent, ...prev].slice(0, 50));
 
     // Fire server action in the background
     logFart(type).then((result) => {
@@ -124,7 +124,7 @@ export default function DashboardClient({ initialFartCount, initialPoopCount, ca
       bristolScale: bristol,
     };
     setPoopCount(prev => prev + 1);
-    setLatestEvents(prev => [newEvent, ...prev].slice(0, 5));
+    setLatestEvents(prev => [newEvent, ...prev].slice(0, 50));
 
     // Fire server action in the background
     logPoop(bristol).then((result) => {

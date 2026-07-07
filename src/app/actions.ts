@@ -82,6 +82,4 @@ export async function undoEvent(id: string, type: 'fart' | 'poop') {
     console.error("Undo error:", error)
     throw new Error('Failed to undo event: ' + error.message)
   }
-
-  revalidatePath('/')
 }
