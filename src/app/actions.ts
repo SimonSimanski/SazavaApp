@@ -15,19 +15,19 @@ export async function logFart(intensity: string) {
   // Mapování z našeho UI na povolené hodnoty v databázi (low, medium, nuclear)
   const dbIntensity = intensity === 'tichacek' ? 'low' : 'nuclear'
 
-  const { error } = await supabase.from('farts_log').insert([
+  const { data, error } = await supabase.from('farts_log').insert([
     {
       user_id: user.id,
       intensity: dbIntensity
     }
-  ])
+  ]).select().single()
 
   if (error) {
     console.error("Fart log error:", error)
     throw new Error('Failed to log fart: ' + error.message)
   }
 
-  revalidatePath('/')
+  return { id: data.id, createdAt: data.created_at, intensity: data.intensity }
 }
 
 export async function logPoop(bristolType: number) {
@@ -39,19 +39,19 @@ export async function logPoop(bristolType: number) {
     throw new Error('User not authenticated')
   }
 
-  const { error } = await supabase.from('poops_log').insert([
+  const { data, error } = await supabase.from('poops_log').insert([
     {
       user_id: user.id,
       bristol_scale: bristolType
     }
-  ])
+  ]).select().single()
 
   if (error) {
     console.error("Poop log error:", error)
     throw new Error('Failed to log poop: ' + error.message)
   }
 
-  revalidatePath('/')
+  return { id: data.id, createdAt: data.created_at, bristolScale: data.bristol_scale }
 }
 
 export async function undoEvent(id: string, type: 'fart' | 'poop') {

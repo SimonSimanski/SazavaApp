@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from "react";
+import { useState, useRef } from "react";
 import { Wind, Recycle, Cloud, VolumeX, Bomb, Droplets, Clock, X, Skull, Ghost, History } from "lucide-react";
 import { logFart, logPoop, undoEvent } from "@/app/actions";
 
@@ -26,13 +26,6 @@ export default function DashboardClient({ initialFartCount, initialPoopCount, ca
   const [latestEvents, setLatestEvents] = useState<LogEvent[]>(initialLatestEvents);
   const [ghosts, setGhosts] = useState<{ id: number; top: number; delay: number; scale: number; duration: number }[]>([]);
   const ghostIdCounter = useRef(0);
-
-  // Sync state when props update from server actions (revalidatePath)
-  useEffect(() => {
-    setLatestEvents(initialLatestEvents);
-    setFartCount(initialFartCount);
-    setPoopCount(initialPoopCount);
-  }, [initialLatestEvents, initialFartCount, initialPoopCount]);
 
   const playFartSound = async (type: "tichacek" | "delobuch") => {
     if (type === "tichacek") {
@@ -96,23 +89,51 @@ export default function DashboardClient({ initialFartCount, initialPoopCount, ca
       gainNode.connect(ctx.destination);
     }
     
-    // Call server action
-    try {
-      await logFart(type);
-      setFartCount(fartCount + 1);
-    } catch (e) {
+    // Optimistically update UI immediately
+    const tempId = `temp-${Date.now()}`;
+    const newEvent: LogEvent = {
+      id: tempId,
+      type: 'fart',
+      createdAt: new Date().toISOString(),
+      intensity: type === 'tichacek' ? 'low' : 'nuclear',
+    };
+    setFartCount(prev => prev + 1);
+    setLatestEvents(prev => [newEvent, ...prev].slice(0, 5));
+
+    // Fire server action in the background
+    logFart(type).then((result) => {
+      // Replace temp ID with real ID from database
+      setLatestEvents(prev => prev.map(e => e.id === tempId ? { ...e, id: result.id, createdAt: result.createdAt } : e));
+    }).catch(e => {
       console.error("Failed to log fart", e);
-    }
+      // Rollback on error
+      setFartCount(prev => Math.max(0, prev - 1));
+      setLatestEvents(prev => prev.filter(e => e.id !== tempId));
+    });
   };
 
   const handlePoopSubmit = async (bristol: number) => {
     setPoopDrawerVisible(false);
-    try {
-      await logPoop(bristol);
-      setPoopCount(prev => prev + 1);
-    } catch (e) {
+    
+    // Optimistically update UI immediately
+    const tempId = `temp-${Date.now()}`;
+    const newEvent: LogEvent = {
+      id: tempId,
+      type: 'poop',
+      createdAt: new Date().toISOString(),
+      bristolScale: bristol,
+    };
+    setPoopCount(prev => prev + 1);
+    setLatestEvents(prev => [newEvent, ...prev].slice(0, 5));
+
+    // Fire server action in the background
+    logPoop(bristol).then((result) => {
+      setLatestEvents(prev => prev.map(e => e.id === tempId ? { ...e, id: result.id, createdAt: result.createdAt } : e));
+    }).catch(e => {
       console.error("Failed to log poop", e);
-    }
+      setPoopCount(prev => Math.max(0, prev - 1));
+      setLatestEvents(prev => prev.filter(e => e.id !== tempId));
+    });
   }
 
   const handleUndo = async (event: LogEvent) => {
