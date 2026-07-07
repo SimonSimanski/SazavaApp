@@ -36,7 +36,7 @@ export default function ScoreboardList({ items }: ScoreboardListProps) {
                       {item.initials}
                     </div>
                     <span className="font-body-md text-body-md text-on-primary-container font-bold">Ty (Já)</span>
-                    {item.isOverloaded && <Biohazard className="w-5 h-5 text-error animate-pulse" title="Tenhle pirát to přehání! (>14 prdů/den)" />}
+                    {item.isOverloaded && <span title="Tenhle pirát to přehání! (>14 prdů/den)"><Biohazard className="w-5 h-5 text-error animate-pulse" /></span>}
                   </div>
                 </div>
                 <div className="flex items-center gap-1 font-body-md text-body-md text-on-primary-container font-bold">
@@ -59,7 +59,7 @@ export default function ScoreboardList({ items }: ScoreboardListProps) {
                       {item.initials}
                     </div>
                     <span className="font-body-lg text-body-lg font-bold">{item.username}</span>
-                    {item.isOverloaded && <Biohazard className="w-5 h-5 text-error animate-pulse" title="Tenhle pirát to přehání! (>14 prdů/den)" />}
+                    {item.isOverloaded && <span title="Tenhle pirát to přehání! (>14 prdů/den)"><Biohazard className="w-5 h-5 text-error animate-pulse" /></span>}
                   </div>
                 </div>
                 <div className="flex items-center gap-1 font-headline-sm text-headline-sm text-tertiary-container">
@@ -82,7 +82,7 @@ export default function ScoreboardList({ items }: ScoreboardListProps) {
                       {item.initials}
                     </div>
                     <span className="font-body-lg text-body-lg text-on-surface font-bold burned-text">{item.username}</span>
-                    {item.isOverloaded && <Biohazard className="w-5 h-5 text-error animate-pulse" title="Tenhle pirát to přehání! (>14 prdů/den)" />}
+                    {item.isOverloaded && <span title="Tenhle pirát to přehání! (>14 prdů/den)"><Biohazard className="w-5 h-5 text-error animate-pulse" /></span>}
                   </div>
                 </div>
                 <div className="flex items-center gap-1 font-headline-sm text-headline-sm text-on-surface">
@@ -105,7 +105,7 @@ export default function ScoreboardList({ items }: ScoreboardListProps) {
                       {item.initials}
                     </div>
                     <span className="font-body-lg text-body-lg text-on-surface font-bold burned-text">{item.username}</span>
-                    {item.isOverloaded && <Biohazard className="w-5 h-5 text-error animate-pulse" title="Tenhle pirát to přehání! (>14 prdů/den)" />}
+                    {item.isOverloaded && <span title="Tenhle pirát to přehání! (>14 prdů/den)"><Biohazard className="w-5 h-5 text-error animate-pulse" /></span>}
                   </div>
                 </div>
                 <div className="flex items-center gap-1 font-headline-sm text-headline-sm text-on-surface">
@@ -127,7 +127,7 @@ export default function ScoreboardList({ items }: ScoreboardListProps) {
                     {item.initials}
                   </div>
                   <span className="font-body-md text-body-md text-on-surface">{item.username}</span>
-                  {item.isOverloaded && <Biohazard className="w-4 h-4 text-error animate-pulse" title="Tenhle pirát to přehání! (>14 prdů/den)" />}
+                  {item.isOverloaded && <span title="Tenhle pirát to přehání! (>14 prdů/den)"><Biohazard className="w-4 h-4 text-error animate-pulse" /></span>}
                 </div>
               </div>
               <div className="flex items-center gap-1 font-body-md text-body-md text-on-surface">

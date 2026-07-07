@@ -1,4 +1,4 @@
-import { Anchor, Key, Skull, Explore } from "lucide-react";
+import { Anchor, Key, Skull, Compass } from "lucide-react";
 import { login } from "@/app/auth/actions";
 import Link from "next/link";
 
