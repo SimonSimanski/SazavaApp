@@ -7,6 +7,7 @@ export default function InstallPrompt() {
   const [deferredPrompt, setDeferredPrompt] = useState<any>(null);
   const [showPrompt, setShowPrompt] = useState(false);
   const [isIos, setIsIos] = useState(false);
+  const [showManualInstructions, setShowManualInstructions] = useState(false);
 
   useEffect(() => {
     // Check if already installed (standalone mode)
@@ -16,50 +17,44 @@ export default function InstallPrompt() {
     // Check if user dismissed it previously
     if (localStorage.getItem("pwa-prompt-dismissed") === "true") return;
 
-    // Detect iOS (iOS does not support beforeinstallprompt)
+    // Detect iOS
     const userAgent = window.navigator.userAgent.toLowerCase();
     const isIosDevice = /iphone|ipad|ipod/.test(userAgent);
-    
-    if (isIosDevice) {
-      setIsIos(true);
-      // Wait a few seconds before showing to not be too aggressive
-      const timer = setTimeout(() => {
-        setShowPrompt(true);
-      }, 3000);
-      return () => clearTimeout(timer);
-    }
+    setIsIos(isIosDevice);
+
+    // Show prompt after 3 seconds if not standalone
+    const timer = setTimeout(() => {
+      setShowPrompt(true);
+    }, 3000);
 
     // Handle standard PWA install prompt (Android/Desktop)
     const handleBeforeInstallPrompt = (e: Event) => {
-      // Prevent the mini-infobar from appearing on mobile
       e.preventDefault();
-      // Stash the event so it can be triggered later.
       setDeferredPrompt(e);
-      // Update UI notify the user they can install the PWA
       setShowPrompt(true);
     };
 
     window.addEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
 
     return () => {
+      clearTimeout(timer);
       window.removeEventListener("beforeinstallprompt", handleBeforeInstallPrompt);
     };
   }, []);
 
   const handleInstallClick = async () => {
-    if (!deferredPrompt) return;
+    if (!deferredPrompt) {
+      // Browser didn't fire the event (maybe already installed, maybe not supported, or fired too early)
+      setShowManualInstructions(true);
+      return;
+    }
     
-    // Show the install prompt
     deferredPrompt.prompt();
-    
-    // Wait for the user to respond to the prompt
     const { outcome } = await deferredPrompt.userChoice;
     
     if (outcome === 'accepted') {
       setShowPrompt(false);
     }
-    
-    // Clear the deferredPrompt variable, since it can only be used once.
     setDeferredPrompt(null);
   };
 
@@ -91,13 +86,17 @@ export default function InstallPrompt() {
             <p className="font-body-md text-sm mb-2 text-on-surface">
               Klepni na ikonu sdílení <Share className="w-4 h-4 inline text-primary" /> dole a vyber <strong>Přidat na plochu</strong>.
             </p>
+          ) : showManualInstructions ? (
+            <p className="font-body-md text-sm mb-3 text-on-surface font-bold">
+              Klikni nahoře na menu prohlížeče (tři tečky) a zvol "Přidat na domovskou obrazovku" nebo "Instalovat aplikaci".
+            </p>
           ) : (
             <p className="font-body-md text-sm mb-3 text-on-surface">
               Nainstaluj si Prdomet rovnou na plochu pro okamžitý přístup!
             </p>
           )}
 
-          {!isIos && (
+          {!isIos && !showManualInstructions && (
             <button 
               onClick={handleInstallClick}
               className="bg-tertiary-fixed text-on-tertiary-fixed font-label-mono px-4 py-2 rounded-lg text-sm uppercase tracking-wider hover:bg-tertiary-fixed-dim transition-colors border-2 border-on-surface shadow-[2px_2px_0px_0px_#1f1c0b] active:translate-y-px active:shadow-none"
