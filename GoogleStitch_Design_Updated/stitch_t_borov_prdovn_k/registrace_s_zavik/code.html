@@ -1,0 +1,247 @@
+<!DOCTYPE html>
+
+<html lang="cs"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Sázavik - Registrace</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com" rel="preconnect"/>
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;700&amp;family=Bricolage+Grotesque:wght@700;800&amp;family=Space+Mono:wght@700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "surface-container-high": "#f1e8cd",
+                      "surface-container-highest": "#ebe2c8",
+                      "primary": "#173514",
+                      "surface-container-lowest": "#ffffff",
+                      "on-primary-container": "#98bc8e",
+                      "on-tertiary-fixed-variant": "#544600",
+                      "on-error": "#ffffff",
+                      "tertiary": "#705d00",
+                      "surface-container": "#f7eed2",
+                      "primary-fixed-dim": "#acd0a1",
+                      "on-primary-fixed": "#032104",
+                      "secondary-fixed-dim": "#ffb68c",
+                      "on-tertiary-container": "#4c3f00",
+                      "on-tertiary": "#ffffff",
+                      "on-secondary": "#ffffff",
+                      "on-background": "#1f1c0b",
+                      "on-primary-fixed-variant": "#2f4e2a",
+                      "error-container": "#ffdad6",
+                      "surface": "#fff9ed",
+                      "background": "#fff9ed",
+                      "tertiary-fixed": "#ffe16d",
+                      "secondary": "#934b19",
+                      "inverse-on-surface": "#faf0d5",
+                      "surface-container-low": "#fcf3d8",
+                      "on-secondary-fixed": "#321200",
+                      "on-primary": "#ffffff",
+                      "secondary-fixed": "#ffdbc9",
+                      "on-secondary-container": "#783603",
+                      "outline": "#73796f",
+                      "on-error-container": "#93000a",
+                      "on-secondary-fixed-variant": "#753401",
+                      "error": "#ba1a1a",
+                      "surface-variant": "#ebe2c8",
+                      "primary-fixed": "#c7edbc",
+                      "outline-variant": "#c3c8bd",
+                      "surface-bright": "#fff9ed",
+                      "on-surface-variant": "#434840",
+                      "inverse-primary": "#acd0a1",
+                      "primary-container": "#2d4c28",
+                      "tertiary-fixed-dim": "#e9c400",
+                      "tertiary-container": "#c9a900",
+                      "inverse-surface": "#35301e",
+                      "surface-dim": "#e2dabf",
+                      "secondary-container": "#ffa26a",
+                      "on-surface": "#1f1c0b",
+                      "surface-tint": "#466640",
+                      "on-tertiary-fixed": "#221b00"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "edge-margin": "20px",
+                      "unit": "4px",
+                      "stack-gap": "16px",
+                      "section-padding": "24px"
+              },
+              "fontFamily": {
+                      "label-mono": [
+                              "Space Mono"
+                      ],
+                      "body-md": [
+                              "Be Vietnam Pro"
+                      ],
+                      "body-lg": [
+                              "Be Vietnam Pro"
+                      ],
+                      "headline-sm": [
+                              "Bricolage Grotesque"
+                      ],
+                      "headline-md": [
+                              "Bricolage Grotesque"
+                      ],
+                      "display-lg": [
+                              "Bricolage Grotesque"
+                      ]
+              },
+              "fontSize": {
+                      "label-mono": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "letterSpacing": "0.05em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "26px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-sm": [
+                              "24px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "headline-md": [
+                              "32px",
+                              {
+                                      "lineHeight": "36px",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "display-lg": [
+                              "48px",
+                              {
+                                      "lineHeight": "52px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "800"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        /* Tactile textures */
+        .bg-parchment {
+            background-color: #fff9ed;
+            background-image: url("data:image/svg+xml,%3Csvg width='100' height='100' viewBox='0 0 100 100' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100' height='100' filter='url(%23noise)' opacity='0.08'/%3E%3C/svg%3E");
+        }
+        .wood-plank {
+            background-color: #f7eed2;
+            border: 2px solid #934b19;
+            box-shadow: 4px 4px 0px 0px #934b19;
+        }
+        .tactile-input {
+            background-color: transparent;
+            border: none;
+            border-bottom: 2px dashed #934b19;
+            border-radius: 0;
+            box-shadow: none;
+        }
+        .tactile-input:focus {
+            outline: none;
+            box-shadow: none;
+            border-bottom: 3px solid #173514;
+        }
+        
+        /* Specific patch style for CTA */
+        .btn-patch {
+            background-color: #ffe16d; /* Gas Yellow / Tertiary Fixed */
+            border: 3px dashed #1f1c0b;
+            box-shadow: 6px 6px 0px 0px #1f1c0b;
+            transition: all 0.2s ease;
+        }
+        .btn-patch:active {
+            transform: translate(2px, 2px);
+            box-shadow: 4px 4px 0px 0px #1f1c0b;
+        }
+      </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-parchment text-on-background min-h-screen flex flex-col items-center justify-center p-edge-margin relative overflow-x-hidden">
+<!-- Decorative background elements -->
+<div class="absolute top-10 left-[-20px] opacity-20 -rotate-12 pointer-events-none">
+<span class="material-symbols-outlined text-[120px]">map</span>
+</div>
+<div class="absolute bottom-20 right-[-30px] opacity-20 rotate-12 pointer-events-none">
+<span class="material-symbols-outlined text-[100px]">sailing</span>
+</div>
+<!-- Main Container -->
+<main class="w-full max-w-md flex flex-col gap-stack-gap z-10">
+<!-- TopAppBar (Transactional - Hidden nav shell, just the branding) -->
+<header class="flex items-center justify-center gap-unit mb-8 relative">
+<span class="material-symbols-outlined text-[40px] text-primary" style="font-variation-settings: 'FILL' 1;">skull</span>
+<h1 class="font-display-lg text-display-lg text-primary uppercase tracking-tighter">SÁZAVIK</h1>
+<div class="absolute -bottom-4 left-1/2 -translate-x-1/2 w-24 h-1 border-b-4 border-primary/20"></div>
+</header>
+<!-- Content Canvas -->
+<div class="wood-plank rounded-xl p-section-padding rotate-1 relative">
+<!-- Pin decoration -->
+<div class="absolute -top-3 left-1/2 -translate-x-1/2 w-6 h-6 bg-secondary rounded-full shadow-sm border-2 border-on-background flex items-center justify-center">
+<div class="w-2 h-2 bg-on-secondary-container rounded-full"></div>
+</div>
+<h2 class="font-headline-md text-headline-md text-center text-on-surface mb-8 -rotate-2">
+                Staň se součástí posádky!
+            </h2>
+<form class="flex flex-col gap-6" onsubmit="event.preventDefault();">
+<!-- Input Group 1 -->
+<div class="flex flex-col gap-2">
+<label class="font-label-mono text-label-mono text-secondary flex items-center gap-2" for="pirate-name">
+<span class="material-symbols-outlined text-[18px]">badge</span>
+                        Jméno piráta
+                    </label>
+<input class="tactile-input w-full py-2 font-label-mono text-body-lg text-on-surface" id="pirate-name" placeholder="Např. Černovous..." required="" type="text"/>
+</div>
+<!-- Input Group 2 -->
+<div class="flex flex-col gap-2 mt-4">
+<label class="font-label-mono text-label-mono text-secondary flex items-center gap-2" for="treasure-password">
+<span class="material-symbols-outlined text-[18px]">key</span>
+                        Heslo k pokladu
+                    </label>
+<input class="tactile-input w-full py-2 font-label-mono text-body-lg text-on-surface" id="treasure-password" placeholder="Tajné slovo..." required="" type="password"/>
+</div>
+<!-- CTA Button -->
+<button class="btn-patch mt-8 w-full py-4 rounded-lg flex items-center justify-center gap-3 group" type="submit">
+<span class="material-symbols-outlined text-[24px] text-on-background group-hover:rotate-12 transition-transform" style="font-variation-settings: 'FILL' 1;">anchor</span>
+<span class="font-headline-sm text-headline-sm text-on-background uppercase tracking-wider">Vstoupit do služeb</span>
+</button>
+</form>
+</div>
+<!-- Footer Link -->
+<div class="mt-8 text-center -rotate-1">
+<a class="font-label-mono text-label-mono text-secondary hover:text-primary transition-colors underline decoration-2 underline-offset-4 decoration-dashed" href="#">
+                Už jsem na palubě? Přihlásit se
+            </a>
+</div>
+</main>
+</body></html>

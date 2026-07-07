@@ -1,0 +1,22 @@
+{
+  "name": "Camp Prdník",
+  "short_name": "Prdník",
+  "description": "Skautská aplikace pro záznam a statistiky tvých tělesných plynů a akcí.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#fff9ed",
+  "theme_color": "#fff9ed",
+  "orientation": "portrait",
+  "icons": [
+    {
+      "src": "/icon-192x192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512x512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}

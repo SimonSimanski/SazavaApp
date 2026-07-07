@@ -1,0 +1,269 @@
+<!DOCTYPE html><html lang="cs" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Prdomet - Fart Scout HQ</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@700;800&amp;family=Be+Vietnam+Pro:wght@400;500&amp;family=Space+Mono:wght@700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                    "inverse-on-surface": "#faf0d5",
+                    "on-surface-variant": "#434840",
+                    "on-primary-fixed": "#032104",
+                    "on-tertiary-fixed": "#221b00",
+                    "inverse-primary": "#acd0a1",
+                    "secondary-fixed": "#ffdbc9",
+                    "surface": "#fff9ed",
+                    "surface-dim": "#e2dabf",
+                    "surface-container-low": "#fcf3d8",
+                    "surface-container-highest": "#ebe2c8",
+                    "on-surface": "#1f1c0b",
+                    "primary-fixed": "#c7edbc",
+                    "secondary-container": "#ffa26a",
+                    "on-secondary-fixed-variant": "#753401",
+                    "on-primary": "#ffffff",
+                    "surface-container": "#f7eed2",
+                    "primary-container": "#2d4c28",
+                    "on-tertiary-fixed-variant": "#544600",
+                    "secondary": "#934b19",
+                    "on-background": "#1f1c0b",
+                    "on-tertiary": "#ffffff",
+                    "surface-variant": "#ebe2c8",
+                    "tertiary-fixed-dim": "#e9c400",
+                    "tertiary": "#705d00",
+                    "surface-bright": "#fff9ed",
+                    "on-primary-fixed-variant": "#2f4e2a",
+                    "surface-container-high": "#f1e8cd",
+                    "on-primary-container": "#98bc8e",
+                    "secondary-fixed-dim": "#ffb68c",
+                    "primary": "#173514",
+                    "surface-tint": "#466640",
+                    "outline": "#73796f",
+                    "tertiary-fixed": "#ffe16d",
+                    "surface-container-lowest": "#ffffff",
+                    "error": "#ba1a1a",
+                    "primary-fixed-dim": "#acd0a1",
+                    "inverse-surface": "#35301e",
+                    "on-error-container": "#93000a",
+                    "background": "#fff9ed",
+                    "on-secondary-fixed": "#321200",
+                    "on-secondary-container": "#783603",
+                    "on-tertiary-container": "#4c3f00",
+                    "on-secondary": "#ffffff",
+                    "tertiary-container": "#c9a900",
+                    "error-container": "#ffdad6",
+                    "on-error": "#ffffff",
+                    "outline-variant": "#c3c8bd"
+            },
+            "borderRadius": {
+                    "DEFAULT": "0.25rem",
+                    "lg": "0.5rem",
+                    "xl": "0.75rem",
+                    "full": "9999px"
+            },
+            "spacing": {
+                    "stack-gap": "16px",
+                    "edge-margin": "20px",
+                    "unit": "4px",
+                    "section-padding": "24px"
+            },
+            "fontFamily": {
+                    "display-lg": [
+                            "Bricolage Grotesque"
+                    ],
+                    "body-md": [
+                            "Be Vietnam Pro"
+                    ],
+                    "headline-sm": [
+                            "Bricolage Grotesque"
+                    ],
+                    "body-lg": [
+                            "Be Vietnam Pro"
+                    ],
+                    "headline-md": [
+                            "Bricolage Grotesque"
+                    ],
+                    "label-mono": [
+                            "Space Mono"
+                    ]
+            },
+            "fontSize": {
+                    "display-lg": [
+                            "48px",
+                            {
+                                    "lineHeight": "52px",
+                                    "letterSpacing": "-0.02em",
+                                    "fontWeight": "800"
+                            }
+                    ],
+                    "body-md": [
+                            "16px",
+                            {
+                                    "lineHeight": "24px",
+                                    "fontWeight": "400"
+                            }
+                    ],
+                    "headline-sm": [
+                            "24px",
+                            {
+                                    "lineHeight": "28px",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "body-lg": [
+                            "18px",
+                            {
+                                    "lineHeight": "26px",
+                                    "fontWeight": "500"
+                            }
+                    ],
+                    "headline-md": [
+                            "32px",
+                            {
+                                    "lineHeight": "36px",
+                                    "fontWeight": "700"
+                            }
+                    ],
+                    "label-mono": [
+                            "14px",
+                            {
+                                    "lineHeight": "20px",
+                                    "letterSpacing": "0.05em",
+                                    "fontWeight": "700"
+                            }
+                    ]
+            }
+    },
+        },
+      }
+    </script>
+<style>
+        body {
+            background-color: theme('colors.background');
+            background-image: url('data:image/svg+xml;utf8,<svg width="100" height="100" xmlns="http://www.w3.org/2000/svg"><path d="M0 0h100v100H0z" fill="%23fff9ed"/><path d="M0 0l100 100M100 0L0 100" stroke="%23ebe2c8" stroke-width="1" fill="none"/></svg>');
+            background-blend-mode: multiply;
+        }
+        
+        .wood-texture {
+            background-color: theme('colors.secondary-container');
+            background-image: repeating-linear-gradient(
+                45deg,
+                transparent,
+                transparent 10px,
+                rgba(0,0,0,0.05) 10px,
+                rgba(0,0,0,0.05) 20px
+            );
+        }
+
+        .patch-border {
+            border: 4px dashed theme('colors.on-secondary-fixed-variant');
+        }
+
+        .hard-shadow {
+            box-shadow: 4px 4px 0px 0px rgba(50,18,0,1);
+        }
+
+        .hard-shadow-lg {
+            box-shadow: 6px 6px 0px 0px rgba(50,18,0,1);
+        }
+        
+        .cork-texture {
+            background-color: theme('colors.surface-container-high');
+            background-image: radial-gradient(circle, rgba(0,0,0,0.05) 1px, transparent 1px);
+            background-size: 10px 10px;
+        }
+    </style>
+</head>
+<body class="text-on-surface pb-32" style="background-color: rgb(244, 228, 188); background-image: url(&quot;data:image/svg+xml;utf8,&lt;svg width=\&quot;200\&quot; height=\&quot;200\&quot; xmlns=\&quot;http://www.w3.org/2000/svg\&quot;&gt;&lt;filter id=\&quot;noise\&quot;&gt;&lt;feTurbulence type=\&quot;fractalNoise\&quot; baseFrequency=\&quot;0.04\&quot; numOctaves=\&quot;3\&quot; stitchTiles=\&quot;stitch\&quot;/&gt;&lt;/filter&gt;&lt;rect width=\&quot;100%\&quot; height=\&quot;100%\&quot; filter=\&quot;url(%23noise)\&quot; opacity=\&quot;0.05\&quot;/&gt;&lt;/svg&gt;&quot;);">
+<!-- TopAppBar -->
+<header class="w-full top-0 border-b-4 border-secondary-container border-b-4 border-on-secondary-container shadow-[4px_4px_0px_0px_rgba(117,52,1,1)] shadow-[4px_4px_0px_0px_rgba(50,18,0,1)] flex items-center justify-between px-edge-margin h-20 bg-surface-variant dark:bg-surface-container-highest z-40 sticky">
+<div class="flex items-center gap-2">
+<span class="material-symbols-outlined text-4xl text-primary dark:text-primary-fixed-dim" style="font-variation-settings: &quot;FILL&quot; 1;">anchor</span>
+<h1 class="font-display-lg text-display-lg text-on-surface-variant uppercase tracking-tight">SÁZAVIK</h1>
+<span class="material-symbols-outlined text-2xl text-secondary opacity-80">skull</span></div>
+<button class="hover:rotate-1 transition-transform active:scale-95 duration-100 p-2 rounded-full bg-surface-container-low hard-shadow border-2 border-on-surface-variant">
+<span class="material-symbols-outlined">anchor</span>
+</button>
+</header>
+<main class="p-edge-margin flex flex-col gap-8 max-w-md mx-auto">
+<!-- Daily Count Patch -->
+<section class="flex justify-center rotate-1">
+<div class="bg-surface-container-low patch-border rounded-xl p-4 hard-shadow-lg flex items-center gap-4 border-4 border-on-surface">
+<div class="flex flex-col items-center border-r-2 border-dashed border-outline-variant pr-4">
+<span class="material-symbols-outlined text-3xl text-secondary" style="font-variation-settings: 'FILL' 1;">air</span>
+<span class="font-headline-sm text-headline-sm text-on-surface mt-1">5</span>
+<span class="font-label-mono text-label-mono text-on-surface-variant uppercase">Prdů</span>
+</div>
+<div class="flex flex-col items-center pl-2">
+<span class="material-symbols-outlined text-3xl text-tertiary" style="font-variation-settings: 'FILL' 1;">loop</span>
+<span class="font-headline-sm text-headline-sm text-on-surface mt-1">1</span>
+<span class="font-label-mono text-label-mono text-on-surface-variant uppercase">Hovínko</span>
+</div>
+<div class="absolute -top-3 -right-3 text-on-error font-label-mono text-label-mono px-2 py-1 rounded-full hard-shadow rotate-12 border-2 border-on-surface bg-tertiary-fixed">Dnes</div>
+</div>
+</section>
+<!-- Main Actions -->
+<section class="flex flex-col gap-6 -rotate-1 mt-4">
+<!-- Record Fart Button (Expandable) -->
+<div class="relative w-full group">
+<button class="w-full bg-tertiary-fixed wood-texture rounded-2xl border-4 border-on-surface hard-shadow-lg p-6 flex flex-col items-center justify-center hover:rotate-1 transition-transform active:scale-95 duration-100 overflow-hidden relative z-10" onclick="document.getElementById('fart-options').classList.toggle('hidden')">
+<span class="material-symbols-outlined text-6xl text-on-surface mb-2" style="font-variation-settings: 'FILL' 1;">cloud</span>
+<h2 class="font-headline-md text-headline-md text-on-surface text-center">Zaznamenat prd</h2>
+<p class="font-label-mono text-label-mono text-on-surface-variant mt-2 uppercase">Zmáčkni mě!</p>
+</button>
+<!-- Sub-options (Hidden by default, simple toggle for demo) -->
+<div class="hidden absolute top-full left-0 w-full pt-4 z-0" id="fart-options">
+<div class="bg-surface-container-highest cork-texture border-4 border-on-surface rounded-xl p-4 hard-shadow flex gap-4">
+<button class="flex-1 bg-surface rounded-lg border-2 border-on-surface p-3 flex flex-col items-center hover:bg-surface-dim transition-colors hard-shadow">
+<span class="material-symbols-outlined text-2xl text-on-surface-variant mb-1">volume_mute</span>
+<span class="font-label-mono text-label-mono text-on-surface">Ticháček</span>
+</button>
+<button class="flex-1 bg-error-container rounded-lg border-2 border-on-surface p-3 flex flex-col items-center hover:bg-[#ffb4ab] transition-colors hard-shadow">
+<span class="material-symbols-outlined text-2xl text-on-error-container mb-1">explosion</span>
+<span class="font-label-mono text-label-mono text-on-error-container">Dělobuch</span>
+</button>
+</div>
+</div>
+</div>
+<!-- Spacer for expandable area -->
+
+<!-- Toilet Visit Button -->
+<button class="w-full bg-secondary-container wood-texture rounded-2xl border-4 border-on-surface hard-shadow-lg p-6 flex items-center justify-between hover:-rotate-1 transition-transform active:scale-95 duration-100">
+<div class="flex flex-col text-left">
+<h2 class="font-headline-sm text-headline-sm text-on-secondary-container">Návštěva WC</h2>
+<p class="font-label-mono text-label-mono text-on-secondary-container opacity-80 mt-1 uppercase">Velká akce</p>
+</div>
+<div class="bg-surface rounded-full p-4 border-2 border-on-surface hard-shadow flex items-center justify-center">
+<span class="material-symbols-outlined text-4xl text-secondary" style="font-variation-settings: 'FILL' 1;">water_drop</span>
+</div>
+</button>
+</section>
+<!-- Recent Log (Decorative) -->
+<section class="mt-8 bg-surface-container border-4 border-on-surface rounded-lg p-4 hard-shadow rotate-1 cork-texture">
+<h3 class="font-headline-sm text-headline-sm text-on-surface border-b-2 border-dashed border-outline pb-2 mb-4">Poslední úlovek</h3>
+<div class="flex items-center gap-4 bg-surface p-3 rounded border-2 border-on-surface">
+<span class="material-symbols-outlined text-2xl text-on-surface-variant">schedule</span>
+<div>
+<p class="font-body-lg text-body-lg text-on-surface">Před 2 hodinami</p>
+<p class="font-label-mono text-label-mono text-on-surface-variant">Ticháček u táboráku</p>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar -->
+<nav class="fixed bottom-0 w-full z-50 border-t-4 border-on-surface border-t-4 border-on-secondary-container shadow-[0_-4px_0px_0px_rgba(117,52,1,1)] shadow-[0_-6px_0px_0px_rgba(50,18,0,1)] fixed bottom-0 left-0 w-full z-50 flex justify-around items-center px-4 pb-4 pt-2 bg-surface-container-high dark:bg-surface-container-highest md:hidden">
+<!-- Active Item: Log -->
+<button class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-xl border-2 border-dashed border-on-secondary-fixed-variant p-2 scale-110 -translate-y-2 hover:bg-surface-container-highest hover:rotate-1 active:translate-y-1 transition-all group"><span class="material-symbols-outlined text-2xl mb-1 text-primary dark:text-primary-fixed group-hover:rotate-12 transition-transform" style="font-variation-settings: &quot;FILL&quot; 1;">explore</span><span class="font-label-mono text-label-mono text-primary dark:text-primary-fixed">Záznam</span></button>
+<!-- Inactive Item: Scores -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container-highest hover:rotate-1 active:translate-y-1 transition-all group"><span class="material-symbols-outlined text-2xl mb-1 group-hover:-rotate-12 transition-transform">leaderboard</span><span class="font-label-mono text-label-mono">Žebříček</span></button>
+<!-- Inactive Item: Gear -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant p-2 hover:bg-surface-container-highest hover:rotate-1 active:translate-y-1 transition-all group"><span class="material-symbols-outlined text-2xl mb-1 group-hover:rotate-12 transition-transform">inventory_2</span><span class="font-label-mono text-label-mono">Další</span></button>
+</nav>
+
+
+</body></html>
