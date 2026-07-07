@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import { Bricolage_Grotesque, Be_Vietnam_Pro, Space_Mono } from "next/font/google";
+import NextTopLoader from 'nextjs-toploader';
 import "./globals.css";
 import BottomNav from "@/components/BottomNav";
 import Header from "@/components/Header";
@@ -67,6 +68,7 @@ export default function RootLayout({
       className={`${bricolage.style.fontFamily} ${beVietnamPro.style.fontFamily} ${spaceMono.style.fontFamily} antialiased`}
     >
       <body className="text-on-surface pb-32" suppressHydrationWarning>
+        <NextTopLoader color="#574300" showSpinner={false} height={4} />
         <Header />
         <main className="p-edge-margin flex flex-col gap-8 max-w-md mx-auto">
           {children}
