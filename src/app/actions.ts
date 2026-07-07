@@ -65,7 +65,14 @@ export async function undoEvent(id: string, type: 'fart' | 'poop') {
 
   const table = type === 'fart' ? 'farts_log' : 'poops_log'
 
-  const { error } = await supabase
+  // Create an admin client to bypass RLS in case there is no DELETE policy
+  const { createClient: createSupabaseClient } = await import('@supabase/supabase-js');
+  const supabaseAdmin = createSupabaseClient(
+    process.env.NEXT_PUBLIC_SUPABASE_URL!,
+    process.env.SUPABASE_SERVICE_ROLE_KEY!
+  )
+
+  const { error } = await supabaseAdmin
     .from(table)
     .delete()
     .eq('id', id)
