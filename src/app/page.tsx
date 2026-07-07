@@ -30,6 +30,8 @@ export default async function Home() {
     campStatusText = "Tábor skončil"
   }
 
+  let latestEvents: any[] = []
+
   if (user) {
     // Get today's start and end dates
     const today = new Date()
@@ -56,7 +58,42 @@ export default async function Home() {
       .lt('created_at', tomorrow.toISOString())
 
     if (!pError && pCount !== null) poopCount = pCount
+
+    // Fetch latest 5 farts
+    const { data: latestFarts } = await supabase
+      .from('farts_log')
+      .select('*')
+      .eq('user_id', user.id)
+      .order('created_at', { ascending: false })
+      .limit(5)
+
+    // Fetch latest 5 poops
+    const { data: latestPoops } = await supabase
+      .from('poops_log')
+      .select('*')
+      .eq('user_id', user.id)
+      .order('created_at', { ascending: false })
+      .limit(5)
+
+    const farts = (latestFarts || []).map((f) => ({
+      id: f.id,
+      type: 'fart',
+      createdAt: f.created_at,
+      intensity: f.intensity
+    }))
+
+    const poops = (latestPoops || []).map((p) => ({
+      id: p.id,
+      type: 'poop',
+      createdAt: p.created_at,
+      bristolScale: p.bristol_scale
+    }))
+
+    // Merge and sort
+    latestEvents = [...farts, ...poops]
+      .sort((a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime())
+      .slice(0, 5)
   }
 
-  return <DashboardClient initialFartCount={fartCount} initialPoopCount={poopCount} campStatusText={campStatusText} />
+  return <DashboardClient initialFartCount={fartCount} initialPoopCount={poopCount} campStatusText={campStatusText} initialLatestEvents={latestEvents} />
 }

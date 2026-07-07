@@ -1,21 +1,38 @@
 "use client";
 
-import { useState, useRef } from "react";
-import { Wind, Recycle, Cloud, VolumeX, Bomb, Droplets, Clock, X, Skull, Ghost } from "lucide-react";
-import { logFart, logPoop } from "@/app/actions";
+import { useState, useRef, useEffect } from "react";
+import { Wind, Recycle, Cloud, VolumeX, Bomb, Droplets, Clock, X, Skull, Ghost, History } from "lucide-react";
+import { logFart, logPoop, undoEvent } from "@/app/actions";
+
+export type LogEvent = {
+  id: string;
+  type: 'fart' | 'poop';
+  createdAt: string;
+  intensity?: string;
+  bristolScale?: number;
+};
 
 interface DashboardClientProps {
   initialFartCount: number;
   initialPoopCount: number;
   campStatusText?: string;
+  initialLatestEvents?: LogEvent[];
 }
 
-export default function DashboardClient({ initialFartCount, initialPoopCount, campStatusText }: DashboardClientProps) {
+export default function DashboardClient({ initialFartCount, initialPoopCount, campStatusText, initialLatestEvents = [] }: DashboardClientProps) {
   const [poopDrawerVisible, setPoopDrawerVisible] = useState(false);
   const [fartCount, setFartCount] = useState(initialFartCount);
   const [poopCount, setPoopCount] = useState(initialPoopCount);
+  const [latestEvents, setLatestEvents] = useState<LogEvent[]>(initialLatestEvents);
   const [ghosts, setGhosts] = useState<{ id: number; top: number; delay: number; scale: number; duration: number }[]>([]);
   const ghostIdCounter = useRef(0);
+
+  // Sync state when props update from server actions (revalidatePath)
+  useEffect(() => {
+    setLatestEvents(initialLatestEvents);
+    setFartCount(initialFartCount);
+    setPoopCount(initialPoopCount);
+  }, [initialLatestEvents, initialFartCount, initialPoopCount]);
 
   const playFartSound = async (type: "tichacek" | "delobuch") => {
     if (type === "tichacek") {
@@ -92,11 +109,29 @@ export default function DashboardClient({ initialFartCount, initialPoopCount, ca
     setPoopDrawerVisible(false);
     try {
       await logPoop(bristol);
-      setPoopCount(poopCount + 1);
+      setPoopCount(prev => prev + 1);
     } catch (e) {
       console.error("Failed to log poop", e);
     }
   }
+
+  const handleUndo = async (event: LogEvent) => {
+    // Optimistic remove
+    setLatestEvents(prev => prev.filter(e => e.id !== event.id));
+    
+    // Optimistically decrement count if it was from today
+    const isToday = new Date(event.createdAt).toDateString() === new Date().toDateString();
+    if (isToday) {
+      if (event.type === 'fart') setFartCount(c => Math.max(0, c - 1));
+      else setPoopCount(c => Math.max(0, c - 1));
+    }
+
+    try {
+      await undoEvent(event.id, event.type);
+    } catch (e) {
+      console.error("Failed to undo event", e);
+    }
+  };
 
   return (
     <>
@@ -237,12 +272,51 @@ export default function DashboardClient({ initialFartCount, initialPoopCount, ca
         <h3 className="font-headline-sm text-headline-sm text-on-surface border-b-2 border-dashed border-outline pb-2 mb-4">
           Poslední úlovek
         </h3>
-        <div className="flex items-center gap-4 bg-surface p-3 rounded border-2 border-on-surface">
-          <Clock className="w-6 h-6 text-on-surface-variant" />
-          <div>
-            <p className="font-body-lg text-body-lg text-on-surface">Zatím nic nezaznamenáno</p>
+        
+        {latestEvents.length > 0 ? (
+          latestEvents.slice(0, 1).map((event) => {
+            const isFart = event.type === 'fart';
+            const timeString = new Date(event.createdAt).toLocaleTimeString('cs-CZ', { hour: '2-digit', minute: '2-digit' });
+            
+            let detailText = '';
+            if (isFart) {
+              detailText = event.intensity === 'low' ? 'Ticháček' : 'Dělobuch';
+            } else {
+              detailText = `Velikost: Bristol ${event.bristolScale}`;
+            }
+
+            return (
+              <div key={event.id} className="flex flex-col gap-3 animate-in fade-in zoom-in-95 duration-200">
+                <div className="flex items-center gap-4 bg-surface p-3 rounded-lg border-2 border-on-surface shadow-sm">
+                  <div className={`p-2 rounded-full border-2 border-on-surface ${isFart ? 'bg-secondary-container' : 'bg-tertiary-container'}`}>
+                    {isFart ? (
+                      <Wind className="w-6 h-6 text-on-secondary-container" fill="currentColor" />
+                    ) : (
+                      <Droplets className="w-6 h-6 text-on-tertiary-container" fill="currentColor" />
+                    )}
+                  </div>
+                  <div className="flex-1">
+                    <p className="font-headline-sm text-on-surface">{isFart ? 'Prd' : 'Velká akce'}</p>
+                    <p className="font-label-mono text-xs text-on-surface-variant uppercase">{timeString} • {detailText}</p>
+                  </div>
+                </div>
+                <button 
+                  onClick={() => handleUndo(event)}
+                  className="w-full flex items-center justify-center gap-2 bg-error text-on-error py-3 px-4 rounded-lg border-2 border-on-surface hard-shadow active:translate-y-[2px] active:shadow-none transition-all font-label-mono uppercase tracking-wider text-sm hover:bg-[#ff4444]"
+                >
+                  <History className="w-5 h-5" /> Zatlačit zpátky
+                </button>
+              </div>
+            )
+          })
+        ) : (
+          <div className="flex items-center gap-4 bg-surface p-3 rounded border-2 border-on-surface">
+            <Clock className="w-6 h-6 text-on-surface-variant" />
+            <div>
+              <p className="font-body-lg text-body-lg text-on-surface">Zatím nic nezaznamenáno</p>
+            </div>
           </div>
-        </div>
+        )}
       </section>
     </>
   );

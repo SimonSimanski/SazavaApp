@@ -53,3 +53,28 @@ export async function logPoop(bristolType: number) {
 
   revalidatePath('/')
 }
+
+export async function undoEvent(id: string, type: 'fart' | 'poop') {
+  const supabase = await createClient()
+
+  const { data: { user } } = await supabase.auth.getUser()
+
+  if (!user) {
+    throw new Error('User not authenticated')
+  }
+
+  const table = type === 'fart' ? 'farts_log' : 'poops_log'
+
+  const { error } = await supabase
+    .from(table)
+    .delete()
+    .eq('id', id)
+    .eq('user_id', user.id) // Ensure users can only delete their own records
+
+  if (error) {
+    console.error("Undo error:", error)
+    throw new Error('Failed to undo event: ' + error.message)
+  }
+
+  revalidatePath('/')
+}
