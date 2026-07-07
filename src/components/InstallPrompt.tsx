@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useCallback } from "react";
-import { Download, X, Share } from "lucide-react";
+import { Download, X, Share, ArrowDown } from "lucide-react";
 
 // Shared state so the Settings page button can also trigger install
 let globalDeferredPrompt: any = null;
@@ -130,11 +130,22 @@ export default function InstallPrompt() {
           </h4>
 
           {isIos ? (
-            <p className="font-body-md text-sm mb-2 text-on-surface">
-              Klepni dole na{" "}
-              <Share className="w-4 h-4 inline text-primary" /> a vyber{" "}
-              <strong>&quot;Přidat na plochu&quot;</strong>.
-            </p>
+            <div className="flex flex-col gap-2 mt-2">
+              <p className="font-body-md text-sm text-on-surface mb-1">
+                Jelikož jsi na iPhonu, musíš appku přidat růčo:
+              </p>
+              <div className="flex items-center gap-3 bg-surface p-2.5 rounded-lg border-2 border-on-surface/20">
+                <div className="bg-primary text-on-primary w-6 h-6 rounded-full flex items-center justify-center shrink-0 font-bold text-xs shadow-sm">1</div>
+                <p className="text-sm font-label-mono text-on-surface">Klepni dole na sdílení <Share className="w-4 h-4 inline text-primary mx-0.5" /></p>
+              </div>
+              <div className="flex items-center gap-3 bg-surface p-2.5 rounded-lg border-2 border-on-surface/20">
+                <div className="bg-primary text-on-primary w-6 h-6 rounded-full flex items-center justify-center shrink-0 font-bold text-xs shadow-sm">2</div>
+                <p className="text-sm font-label-mono text-on-surface">Zvol <strong>Přidat na plochu</strong></p>
+              </div>
+              <div className="flex justify-center mt-2 text-primary animate-bounce">
+                <ArrowDown className="w-6 h-6" />
+              </div>
+            </div>
           ) : canInstall ? (
             <>
               <p className="font-body-md text-sm mb-3 text-on-surface">
