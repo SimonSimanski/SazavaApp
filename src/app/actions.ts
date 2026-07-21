@@ -54,6 +54,33 @@ export async function logPoop(bristolType: number) {
   return { id: data.id, createdAt: data.created_at, bristolScale: data.bristol_scale }
 }
 
+export async function saveGameScore(score: number) {
+  const supabase = await createClient()
+
+  const { data: { user } } = await supabase.auth.getUser()
+
+  if (!user) {
+    throw new Error('User not authenticated')
+  }
+
+  // Ochrana proti nesmyslným hodnotám
+  const safeScore = Math.max(0, Math.min(100000, Math.floor(Number(score) || 0)))
+
+  const { data, error } = await supabase.from('game_scores').insert([
+    {
+      user_id: user.id,
+      score: safeScore
+    }
+  ]).select().single()
+
+  if (error) {
+    console.error("Game score error:", error)
+    throw new Error('Failed to save game score: ' + error.message)
+  }
+
+  return { id: data.id, score: data.score, createdAt: data.created_at }
+}
+
 export async function undoEvent(id: string, type: 'fart' | 'poop') {
   const supabase = await createClient()
 

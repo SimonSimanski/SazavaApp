@@ -1,6 +1,7 @@
 import { createClient } from "@/utils/supabase/server";
 import { Medal, Flame, Skull, Tornado } from "lucide-react";
 import ScoreboardList, { ScoreboardItem } from "@/components/ScoreboardList";
+import ShowAllScoreboard from "@/components/ShowAllScoreboard";
 import ActivityChart from "@/components/ActivityChart";
 import WeekFilter from "@/components/WeekFilter";
 import { redirect } from "next/navigation";
@@ -96,6 +97,9 @@ export default async function Scoreboard({ searchParams }: ScoreboardProps) {
     top5.push(myItem);
   }
 
+  // Zbytek pirátů (rank 6+), bez aktuálního uživatele - ten je už případně v top5
+  const restItems = allItems.slice(5).filter(i => !i.isCurrentUser);
+
   // --- CHART LOGIC ---
   const dailyData: any[] = [];
   const dayNames = ["NE", "PO", "ÚT", "ST", "ČT", "PÁ", "SO"];
@@ -161,6 +165,7 @@ export default async function Scoreboard({ searchParams }: ScoreboardProps) {
       <WeekFilter />
 
       <ScoreboardList items={top5} />
+      <ShowAllScoreboard restItems={restItems} />
       <ActivityChart data={dailyData} users={chartUsers} chartTitle={chartTitle} />
 
       {/* Decorative Elements */}

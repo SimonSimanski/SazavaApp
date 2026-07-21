@@ -14,6 +14,29 @@ interface ScoreboardListProps {
   items: ScoreboardItem[];
 }
 
+// Výchozí řádek (styl pro rank 4+), znovupoužitý i pro rozbalený seznam zbylých pirátů
+export function ScoreboardRow({ item }: { item: ScoreboardItem }) {
+  return (
+    <div className="bg-surface-container border-2 border-dashed border-outline-variant shadow-[2px_2px_0px_0px_rgba(115,121,111,0.5)] rounded-lg p-3 flex items-center justify-between relative z-0" style={{ transform: "rotate(-0.2deg)" }}>
+      <div className="flex items-center gap-4">
+        <div className="w-8 h-8 flex items-center justify-center font-body-md text-body-md text-outline">
+          {item.rank}
+        </div>
+        <div className="flex items-center gap-3">
+          <div className="w-8 h-8 rounded-full bg-primary-fixed-dim flex items-center justify-center font-body-md text-body-md text-on-primary-container shadow-inner">
+            {item.initials}
+          </div>
+          <span className="font-body-md text-body-md text-on-surface">{item.username}</span>
+          {item.isOverloaded && <span title="Tenhle pirát to přehání! (>14 prdů/den)"><Biohazard className="w-4 h-4 text-error animate-pulse" /></span>}
+        </div>
+      </div>
+      <div className="flex items-center gap-1 font-body-md text-body-md text-on-surface">
+        {item.count} <Wind className="w-4 h-4" />
+      </div>
+    </div>
+  );
+}
+
 export default function ScoreboardList({ items }: ScoreboardListProps) {
   return (
     <section className="flex flex-col gap-stack-gap">
@@ -116,25 +139,7 @@ export default function ScoreboardList({ items }: ScoreboardListProps) {
           }
 
           // Rank 4+
-          return (
-            <div key={item.username} className="bg-surface-container border-2 border-dashed border-outline-variant shadow-[2px_2px_0px_0px_rgba(115,121,111,0.5)] rounded-lg p-3 flex items-center justify-between relative z-0" style={{ transform: "rotate(-0.2deg)" }}>
-              <div className="flex items-center gap-4">
-                <div className="w-8 h-8 flex items-center justify-center font-body-md text-body-md text-outline">
-                  {item.rank}
-                </div>
-                <div className="flex items-center gap-3">
-                  <div className="w-8 h-8 rounded-full bg-primary-fixed-dim flex items-center justify-center font-body-md text-body-md text-on-primary-container shadow-inner">
-                    {item.initials}
-                  </div>
-                  <span className="font-body-md text-body-md text-on-surface">{item.username}</span>
-                  {item.isOverloaded && <span title="Tenhle pirát to přehání! (>14 prdů/den)"><Biohazard className="w-4 h-4 text-error animate-pulse" /></span>}
-                </div>
-              </div>
-              <div className="flex items-center gap-1 font-body-md text-body-md text-on-surface">
-                {item.count} <Wind className="w-4 h-4" />
-              </div>
-            </div>
-          );
+          return <ScoreboardRow key={item.username} item={item} />;
         })}
       </div>
     </section>
