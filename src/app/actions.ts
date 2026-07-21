@@ -6,6 +6,7 @@ import { sendPushToAll } from '@/utils/push'
 
 // Popisky velikostí (musí odpovídat výběru v DashboardClient)
 const BRISTOL_LABELS: Record<number, string> = {
+  7: 'Rozprašovač',
   1: 'Mini bobík',
   2: 'Hrudkovitý klobásek',
   3: 'Klasický jezevčík',

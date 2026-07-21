@@ -5,6 +5,7 @@ import "./globals.css";
 import BottomNav from "@/components/BottomNav";
 import Header from "@/components/Header";
 import InstallPrompt from "@/components/InstallPrompt";
+import PirateNudge from "@/components/PirateNudge";
 
 const bricolage = Bricolage_Grotesque({
   subsets: ["latin", "latin-ext"],
@@ -74,6 +75,7 @@ export default function RootLayout({
           {children}
         </main>
         <BottomNav />
+        <PirateNudge />
         <InstallPrompt />
       </body>
     </html>

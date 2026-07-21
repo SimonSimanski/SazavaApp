@@ -2,21 +2,14 @@
 
 import { useEffect, useState } from "react";
 import { Bell, BellOff, BellRing } from "lucide-react";
-import { subscribeToPush, unsubscribeFromPush } from "@/app/actions";
+import {
+  getPushState,
+  enablePush,
+  disablePush,
+  type PushState,
+} from "@/utils/pushClient";
 
-// VAPID public key base64url -> Uint8Array (pro applicationServerKey)
-function urlBase64ToUint8Array(base64String: string): Uint8Array {
-  const padding = "=".repeat((4 - (base64String.length % 4)) % 4);
-  const base64 = (base64String + padding).replace(/-/g, "+").replace(/_/g, "/");
-  const rawData = window.atob(base64);
-  const outputArray = new Uint8Array(rawData.length);
-  for (let i = 0; i < rawData.length; i++) {
-    outputArray[i] = rawData.charCodeAt(i);
-  }
-  return outputArray;
-}
-
-type State = "loading" | "unsupported" | "no-sw" | "denied" | "off" | "on";
+type State = "loading" | PushState;
 
 export default function NotificationToggle() {
   const [state, setState] = useState<State>("loading");
@@ -24,68 +17,19 @@ export default function NotificationToggle() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    const init = async () => {
-      if (
-        typeof window === "undefined" ||
-        !("serviceWorker" in navigator) ||
-        !("PushManager" in window) ||
-        !("Notification" in window)
-      ) {
-        setState("unsupported");
-        return;
-      }
-
-      if (Notification.permission === "denied") {
-        setState("denied");
-        return;
-      }
-
-      const reg = await navigator.serviceWorker.getRegistration();
-      if (!reg) {
-        // Service worker běží jen v produkci / nainstalované aplikaci
-        setState("no-sw");
-        return;
-      }
-
-      const sub = await reg.pushManager.getSubscription();
-      setState(sub ? "on" : "off");
-    };
-
-    init().catch((e) => {
-      console.error(e);
-      setState("off");
-    });
+    getPushState()
+      .then(setState)
+      .catch((e) => {
+        console.error(e);
+        setState("off");
+      });
   }, []);
 
   const enable = async () => {
     setBusy(true);
     setError(null);
     try {
-      const permission = await Notification.requestPermission();
-      if (permission !== "granted") {
-        setState(permission === "denied" ? "denied" : "off");
-        return;
-      }
-
-      const reg = await navigator.serviceWorker.getRegistration();
-      if (!reg) {
-        setState("no-sw");
-        return;
-      }
-
-      const vapid = process.env.NEXT_PUBLIC_VAPID_PUBLIC_KEY;
-      if (!vapid) {
-        setError("Chybí veřejný VAPID klíč.");
-        return;
-      }
-
-      const sub = await reg.pushManager.subscribe({
-        userVisibleOnly: true,
-        applicationServerKey: urlBase64ToUint8Array(vapid) as BufferSource,
-      });
-
-      await subscribeToPush(sub.toJSON() as any);
-      setState("on");
+      setState(await enablePush());
     } catch (e) {
       console.error("Zapnutí notifikací selhalo", e);
       setError("Zapnutí notifikací se nepodařilo.");
@@ -98,14 +42,7 @@ export default function NotificationToggle() {
     setBusy(true);
     setError(null);
     try {
-      const reg = await navigator.serviceWorker.getRegistration();
-      const sub = await reg?.pushManager.getSubscription();
-      if (sub) {
-        const endpoint = sub.endpoint;
-        await sub.unsubscribe();
-        await unsubscribeFromPush(endpoint);
-      }
-      setState("off");
+      setState(await disablePush());
     } catch (e) {
       console.error("Vypnutí notifikací selhalo", e);
       setError("Vypnutí notifikací se nepodařilo.");

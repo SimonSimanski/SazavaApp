@@ -135,7 +135,7 @@ export default async function Scoreboard({ searchParams }: ScoreboardProps) {
     top5.forEach(userItem => {
       const uCount = dayFarts.filter(f => f.user_id === userItem._userId).length;
       dayObj[userItem._userId!] = uCount;
-      if (uCount > 14) {
+      if (uCount > 34) {
         userItem.isOverloaded = true;
       }
     });

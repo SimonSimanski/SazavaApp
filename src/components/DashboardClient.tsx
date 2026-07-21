@@ -192,23 +192,23 @@ export default function DashboardClient({ initialFartCount, initialPoopCount, ca
         </div>
       )}
       <section className="flex flex-col items-center rotate-1">
-        <div className={`patch-border rounded-xl p-4 hard-shadow-lg flex items-center gap-4 border-4 border-on-surface relative transition-colors ${fartCount > 14 ? 'bg-error-container border-error' : 'bg-surface-container-low'}`}>
-          <div className={`flex flex-col items-center border-r-2 border-dashed border-outline-variant pr-4 ${fartCount > 14 ? 'animate-pulse' : ''}`}>
-            <Wind className={`w-8 h-8 ${fartCount > 14 ? 'text-error' : 'text-secondary'}`} fill="currentColor" />
-            <span className={`font-headline-sm text-headline-sm mt-1 ${fartCount > 14 ? 'text-error font-bold' : 'text-on-surface'}`}>{fartCount}</span>
+        <div className={`patch-border rounded-xl p-4 hard-shadow-lg flex items-center gap-4 border-4 border-on-surface relative transition-colors ${fartCount > 34 ? 'bg-error-container border-error' : 'bg-surface-container-low'}`}>
+          <div className={`flex flex-col items-center border-r-2 border-dashed border-outline-variant pr-4 ${fartCount > 34 ? 'animate-pulse' : ''}`}>
+            <Wind className={`w-8 h-8 ${fartCount > 34 ? 'text-error' : 'text-secondary'}`} fill="currentColor" />
+            <span className={`font-headline-sm text-headline-sm mt-1 ${fartCount > 34 ? 'text-error font-bold' : 'text-on-surface'}`}>{fartCount}</span>
             <span className="font-label-mono text-label-mono text-on-surface-variant uppercase">Prdů</span>
           </div>
           <div className="flex flex-col items-center pl-2">
-            <Recycle className={`w-8 h-8 ${fartCount > 14 ? 'text-on-surface-variant' : 'text-tertiary'}`} />
-            <span className={`font-headline-sm text-headline-sm mt-1 ${fartCount > 14 ? 'text-on-surface' : 'text-on-surface'}`}>{poopCount}</span>
+            <Recycle className={`w-8 h-8 ${fartCount > 34 ? 'text-on-surface-variant' : 'text-tertiary'}`} />
+            <span className={`font-headline-sm text-headline-sm mt-1 ${fartCount > 34 ? 'text-on-surface' : 'text-on-surface'}`}>{poopCount}</span>
             <span className="font-label-mono text-label-mono text-on-surface-variant uppercase">Hovínko</span>
           </div>
-          <div className={`absolute -top-3 -right-3 font-label-mono text-label-mono px-2 py-1 rounded-full hard-shadow rotate-12 border-2 border-on-surface ${fartCount > 14 ? 'bg-error text-on-error' : 'bg-tertiary-fixed text-on-error'}`}>
+          <div className={`absolute -top-3 -right-3 font-label-mono text-label-mono px-2 py-1 rounded-full hard-shadow rotate-12 border-2 border-on-surface ${fartCount > 34 ? 'bg-error text-on-error' : 'bg-tertiary-fixed text-on-error'}`}>
             Dnes
           </div>
         </div>
 
-        {fartCount > 14 && (
+        {fartCount > 34 && (
           <div className="mt-4 bg-error-container text-on-error-container p-3 rounded-xl border-2 border-error shadow-[3px_3px_0px_0px_rgba(186,26,26,0.6)] rotate-[-2deg] flex items-center gap-3 w-full max-w-[300px] animate-in slide-in-from-top-2">
             <Skull className="w-8 h-8 text-error shrink-0" />
             <div className="flex flex-col text-left">
@@ -265,19 +265,20 @@ export default function DashboardClient({ initialFartCount, initialPoopCount, ca
                 </div>
                 <div className="flex flex-col gap-3">
                     {[
+                        { val: 7, label: "Rozprašovač" },
                         { val: 1, label: "Mini bobík" },
                         { val: 2, label: "Hrudkovitý klobásek" },
                         { val: 3, label: "Klasický jezevčík" },
                         { val: 4, label: "Hladké torpédo" },
                         { val: 5, label: "Hrabě Kákula (největší)" }
-                    ].map((item) => (
-                        <button 
+                    ].map((item, idx) => (
+                        <button
                             key={item.val}
                             onClick={() => handlePoopSubmit(item.val)}
                             className="bg-surface hover:bg-surface-dim border-2 border-on-surface p-4 rounded-xl flex items-center justify-between group active:scale-95 transition-transform"
                         >
                             <span className="font-label-mono text-label-mono bg-secondary-container text-on-secondary-container w-8 h-8 rounded-full flex items-center justify-center border-2 border-on-surface group-hover:rotate-12 transition-transform">
-                                {item.val}
+                                {idx + 1}
                             </span>
                             <span className="font-body-lg text-body-lg text-on-surface flex-1 text-left ml-4">
                                 {item.label}
