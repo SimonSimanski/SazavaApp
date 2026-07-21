@@ -2,6 +2,16 @@
 
 import { revalidatePath } from 'next/cache'
 import { createClient } from '@/utils/supabase/server'
+import { sendPushToAll } from '@/utils/push'
+
+// Popisky velikostí (musí odpovídat výběru v DashboardClient)
+const BRISTOL_LABELS: Record<number, string> = {
+  1: 'Mini bobík',
+  2: 'Hrudkovitý klobásek',
+  3: 'Klasický jezevčík',
+  4: 'Hladké torpédo',
+  5: 'Hrabě Kákula (největší)',
+}
 
 export async function logFart(intensity: string) {
   const supabase = await createClient()
@@ -51,7 +61,82 @@ export async function logPoop(bristolType: number) {
     throw new Error('Failed to log poop: ' + error.message)
   }
 
+  // Rozeslat notifikaci o Velké akci všem ostatním (chyba pushe nesmí shodit zápis)
+  try {
+    const { data: profile } = await supabase
+      .from('profiles')
+      .select('username')
+      .eq('id', user.id)
+      .single()
+
+    const name = profile?.username || 'Neznámý Pirát'
+    const label = BRISTOL_LABELS[bristolType] || `Bristol ${bristolType}`
+
+    await sendPushToAll(
+      {
+        title: '💩 Velká akce v táboře!',
+        body: `${name} právě zvládl: ${label} (Bristol ${bristolType})`,
+        url: '/',
+      },
+      user.id, // autorovi akce notifikaci neposílat
+    )
+  } catch (pushErr) {
+    console.error('Push notifikace se nepodařila:', pushErr)
+  }
+
   return { id: data.id, createdAt: data.created_at, bristolScale: data.bristol_scale }
+}
+
+export async function subscribeToPush(subscription: {
+  endpoint: string
+  keys: { p256dh: string; auth: string }
+}) {
+  const supabase = await createClient()
+
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) {
+    throw new Error('User not authenticated')
+  }
+
+  const { error } = await supabase
+    .from('push_subscriptions')
+    .upsert(
+      {
+        user_id: user.id,
+        endpoint: subscription.endpoint,
+        subscription: subscription,
+      },
+      { onConflict: 'endpoint' },
+    )
+
+  if (error) {
+    console.error('Subscribe error:', error)
+    throw new Error('Failed to save push subscription: ' + error.message)
+  }
+
+  return { ok: true }
+}
+
+export async function unsubscribeFromPush(endpoint: string) {
+  const supabase = await createClient()
+
+  const { data: { user } } = await supabase.auth.getUser()
+  if (!user) {
+    throw new Error('User not authenticated')
+  }
+
+  const { error } = await supabase
+    .from('push_subscriptions')
+    .delete()
+    .eq('endpoint', endpoint)
+    .eq('user_id', user.id)
+
+  if (error) {
+    console.error('Unsubscribe error:', error)
+    throw new Error('Failed to remove push subscription: ' + error.message)
+  }
+
+  return { ok: true }
 }
 
 export async function saveGameScore(score: number) {

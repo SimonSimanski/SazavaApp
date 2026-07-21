@@ -1,6 +1,7 @@
 import { Backpack, Gamepad2, ChevronRight } from "lucide-react";
 import Link from "next/link";
 import InstallButton from "@/components/InstallButton";
+import NotificationToggle from "@/components/NotificationToggle";
 
 export default function Settings() {
   return (
@@ -32,6 +33,11 @@ export default function Settings() {
           </div>
           <ChevronRight className="w-6 h-6 text-on-surface shrink-0" />
         </Link>
+      </div>
+
+      <div className="rotate-1">
+        <h3 className="font-headline-sm text-headline-sm text-primary mb-3 px-1">🔔 Upozornění</h3>
+        <NotificationToggle />
       </div>
 
       <div className="-rotate-1">

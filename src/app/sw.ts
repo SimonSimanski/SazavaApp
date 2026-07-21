@@ -23,20 +23,41 @@ const serwist = new Serwist({
 self.addEventListener('push', function (event) {
   if (event.data) {
     const data = event.data.json();
-    const options = {
+    const options: NotificationOptions = {
       body: data.body,
       icon: '/icon-192x192.png',
       badge: '/icon-192x192.png',
-      vibrate: [100, 50, 100],
       data: {
+        url: data.url || '/',
         dateOfArrival: Date.now(),
-        primaryKey: '2'
-      }
+      },
     };
     event.waitUntil(
       self.registration.showNotification(data.title, options)
     );
   }
+});
+
+// Kliknutí na notifikaci -> otevřít / zaostřit aplikaci
+self.addEventListener('notificationclick', function (event) {
+  event.notification.close();
+  const targetUrl = (event.notification.data && event.notification.data.url) || '/';
+
+  event.waitUntil(
+    self.clients
+      .matchAll({ type: 'window', includeUncontrolled: true })
+      .then((clientList) => {
+        for (const client of clientList) {
+          if ('focus' in client) {
+            client.navigate(targetUrl);
+            return client.focus();
+          }
+        }
+        if (self.clients.openWindow) {
+          return self.clients.openWindow(targetUrl);
+        }
+      })
+  );
 });
 
 serwist.addEventListeners();
