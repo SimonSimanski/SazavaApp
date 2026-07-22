@@ -4,6 +4,7 @@ export interface ScoreboardItem {
   rank: number;
   username: string;
   count: number;
+  todayCount: number;
   isCurrentUser: boolean;
   initials: string;
   _userId?: string;
@@ -12,6 +13,44 @@ export interface ScoreboardItem {
 
 interface ScoreboardListProps {
   items: ScoreboardItem[];
+}
+
+// Zobrazení počtu prdů s easter eggy:
+//  - 69  → cedulka "Nice"
+//  - 420 → z čísla se kouří
+function FartCountValue({ count }: { count: number }) {
+  if (count === 69) {
+    return (
+      <span className="inline-flex items-center gap-1">
+        <span className="font-label-mono text-[9px] leading-none uppercase bg-tertiary-fixed text-on-tertiary-fixed px-1.5 py-1 rounded-full border-2 border-on-surface shadow-[1px_1px_0px_0px_rgba(50,18,0,1)] -rotate-6 whitespace-nowrap">
+          Nice
+        </span>
+        <span>{count}</span>
+      </span>
+    );
+  }
+
+  if (count === 420) {
+    return (
+      <span className="relative inline-block leading-none">
+        <span className="fart-smoke-puff" style={{ left: "25%", animationDelay: "0s" }} aria-hidden="true" />
+        <span className="fart-smoke-puff" style={{ left: "50%", animationDelay: "0.8s" }} aria-hidden="true" />
+        <span className="fart-smoke-puff" style={{ left: "72%", animationDelay: "1.4s" }} aria-hidden="true" />
+        {count}
+      </span>
+    );
+  }
+
+  return <>{count}</>;
+}
+
+// Dnešní počet v závorce – dědí barvu textu řádku (funguje na světlém i tmavém pozadí)
+function TodayBadge({ count }: { count: number }) {
+  return (
+    <span className="font-label-mono text-[11px] opacity-60 ml-0.5" title="Dnes">
+      ({count})
+    </span>
+  );
 }
 
 // Výchozí řádek (styl pro rank 4+), znovupoužitý i pro rozbalený seznam zbylých pirátů
@@ -31,7 +70,7 @@ export function ScoreboardRow({ item }: { item: ScoreboardItem }) {
         </div>
       </div>
       <div className="flex items-center gap-1 font-body-md text-body-md text-on-surface">
-        {item.count} <Wind className="w-4 h-4" />
+        <FartCountValue count={item.count} /> <Wind className="w-4 h-4" /> <TodayBadge count={item.todayCount} />
       </div>
     </div>
   );
@@ -40,10 +79,15 @@ export function ScoreboardRow({ item }: { item: ScoreboardItem }) {
 export default function ScoreboardList({ items }: ScoreboardListProps) {
   return (
     <section className="flex flex-col gap-stack-gap">
-      <h3 className="font-headline-sm text-headline-sm text-primary flex items-center gap-2 px-2">
-        <ListOrdered className="w-6 h-6" />
-        Tabulka Prdů
-      </h3>
+      <div className="flex items-end justify-between gap-2 px-2">
+        <h3 className="font-headline-sm text-headline-sm text-primary flex items-center gap-2">
+          <ListOrdered className="w-6 h-6" />
+          Tabulka Prdů
+        </h3>
+        <span className="font-label-mono text-[11px] text-on-surface-variant text-right leading-tight shrink-0 pb-1">
+          celkem <span className="opacity-60">(dnes)</span>
+        </span>
+      </div>
       <div className="flex flex-col gap-3">
         {items.map((item) => {
           if (item.isCurrentUser) {
@@ -63,7 +107,7 @@ export default function ScoreboardList({ items }: ScoreboardListProps) {
                   </div>
                 </div>
                 <div className="flex items-center gap-1 font-body-md text-body-md text-on-primary-container font-bold">
-                  {item.count} <Wind className="w-4 h-4" />
+                  <FartCountValue count={item.count} /> <Wind className="w-4 h-4" /> <TodayBadge count={item.todayCount} />
                 </div>
               </div>
             );
@@ -86,7 +130,7 @@ export default function ScoreboardList({ items }: ScoreboardListProps) {
                   </div>
                 </div>
                 <div className="flex items-center gap-1 font-headline-sm text-headline-sm text-tertiary-container">
-                  {item.count} <Wind className="w-5 h-5" />
+                  <FartCountValue count={item.count} /> <Wind className="w-5 h-5" /> <TodayBadge count={item.todayCount} />
                 </div>
               </div>
             );
@@ -109,7 +153,7 @@ export default function ScoreboardList({ items }: ScoreboardListProps) {
                   </div>
                 </div>
                 <div className="flex items-center gap-1 font-headline-sm text-headline-sm text-on-surface">
-                  {item.count} <Wind className="w-5 h-5" />
+                  <FartCountValue count={item.count} /> <Wind className="w-5 h-5" /> <TodayBadge count={item.todayCount} />
                 </div>
               </div>
             );
@@ -132,7 +176,7 @@ export default function ScoreboardList({ items }: ScoreboardListProps) {
                   </div>
                 </div>
                 <div className="flex items-center gap-1 font-headline-sm text-headline-sm text-on-surface">
-                  {item.count} <Wind className="w-5 h-5" />
+                  <FartCountValue count={item.count} /> <Wind className="w-5 h-5" /> <TodayBadge count={item.todayCount} />
                 </div>
               </div>
             );

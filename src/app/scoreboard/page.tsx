@@ -36,6 +36,20 @@ export default async function Scoreboard({ searchParams }: ScoreboardProps) {
     );
   }
 
+  // Dnešní počty prdů – z neomezených dat, než se `farts` zfiltrují podle týdne
+  const dayStart = new Date();
+  dayStart.setHours(0, 0, 0, 0);
+  const dayEnd = new Date(dayStart);
+  dayEnd.setDate(dayStart.getDate() + 1);
+
+  const todayCounts: Record<string, number> = {};
+  farts.forEach((f) => {
+    const d = new Date(f.created_at);
+    if (d >= dayStart && d < dayEnd) {
+      todayCounts[f.user_id] = (todayCounts[f.user_id] || 0) + 1;
+    }
+  });
+
   // Define date ranges
   const campStart = new Date(2026, 6, 18); // 18.7.2026
   const week2Start = new Date(2026, 6, 25); // 25.7.2026
@@ -76,6 +90,7 @@ export default async function Scoreboard({ searchParams }: ScoreboardProps) {
       rank: 0, // will set later
       username: name,
       count: fartCounts[p.id] || 0,
+      todayCount: todayCounts[p.id] || 0,
       isCurrentUser: p.id === user.id,
       initials,
       _userId: p.id,

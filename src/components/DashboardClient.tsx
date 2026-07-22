@@ -3,6 +3,8 @@
 import { useState, useRef } from "react";
 import { Wind, Recycle, Cloud, VolumeX, Bomb, Droplets, Clock, X, Skull, Ghost, History } from "lucide-react";
 import { logFart, logPoop, undoEvent } from "@/app/actions";
+import FartFactPirate from "@/components/FartFactPirate";
+import { randomFartFact } from "@/utils/fartFacts";
 
 export type LogEvent = {
   id: string;
@@ -26,6 +28,7 @@ export default function DashboardClient({ initialFartCount, initialPoopCount, ca
   const [latestEvents, setLatestEvents] = useState<LogEvent[]>(initialLatestEvents);
   const [ghosts, setGhosts] = useState<{ id: number; top: number; delay: number; scale: number; duration: number }[]>([]);
   const ghostIdCounter = useRef(0);
+  const [fartFact, setFartFact] = useState<string | null>(null);
 
   const playFartSound = async (type: "tichacek" | "delobuch") => {
     if (type === "tichacek") {
@@ -100,6 +103,11 @@ export default function DashboardClient({ initialFartCount, initialPoopCount, ca
     setFartCount(prev => prev + 1);
     setLatestEvents(prev => [newEvent, ...prev].slice(0, 50));
 
+    // Easter egg: občas (12 %) vykoukne pirát s náhodným faktem o prdech
+    if (Math.random() < 0.12) {
+      setFartFact(randomFartFact());
+    }
+
     // Fire server action in the background
     logFart(type).then((result) => {
       // Replace temp ID with real ID from database
@@ -170,11 +178,11 @@ export default function DashboardClient({ initialFartCount, initialPoopCount, ca
       `}} />
       
       {ghosts.map(g => (
-        <div 
-          key={g.id} 
+        <div
+          key={g.id}
           className="fixed pointer-events-none z-[100] ghost-animation drop-shadow-md text-on-surface"
-          style={{ 
-            top: `${g.top}%`, 
+          style={{
+            top: `${g.top}%`,
             left: 0,
             animationDelay: `${g.delay}s`,
             animationDuration: `${g.duration}s`
@@ -185,6 +193,8 @@ export default function DashboardClient({ initialFartCount, initialPoopCount, ca
           </div>
         </div>
       ))}
+
+      {fartFact && <FartFactPirate fact={fartFact} onClose={() => setFartFact(null)} />}
 
       {campStatusText && (
         <div className="text-center mt-2 mb-4 bg-tertiary-container text-on-tertiary-container rounded-lg px-4 py-2 mx-auto inline-block font-label-mono text-label-mono uppercase border-2 border-on-surface shadow-[2px_2px_0px_0px_rgba(0,0,0,0.5)] rotate-1">
